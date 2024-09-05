@@ -103,7 +103,7 @@ def create_crosses(indicator1,indicator2,data)
 	for i in range(len(indicator1)):
 		if indicator1[i]>indicator2[i]:
 			P=[1,timestamp[i]]
-			cross.extend(P)
+			cross.append(P)
 		elif indicator1[i]<indicator2[i]:
 			P=[0,timestamp[i]]
 			cross.append(P)
@@ -252,21 +252,21 @@ def buy_pnl(Q,Data,Buy_crosses,Close_buy_crosses,*kwargs):
 	segment_2=kwargs.get('segments_2')
 	
 	for i in range(1,len(main_timestamp)):
-			 n=0
-		    if i > n:
-		    	base_timestamp=main_timestamp[i]
-			    cond1=buy_cond(Buy_crosses[0],Buy_x_value,Base_timestamp)==True
+		n=0
+		if i > n:
+			base_timestamp=main_timestamp[i]
+			cond1=buy_cond(Buy_crosses[0],Buy_x_value,Base_timestamp)==True
 			
-			    middle_timetamp=find_compare_timestamp(segment_2,i)
-			    master_timestamp=find_compare_timestamp(segment_1,i)
+			middle_timetamp=find_compare_timestamp(segment_2,i)
+			master_timestamp=find_compare_timestamp(segment_1,i)
 			
-			    cond2=buy_cond(master_crosses[0],master_crosses[1], master_timestamp)== True
-			    cond3=buy_cond(middle_crosses[0],middle_crosses[1],middle_timestamp)==True
-			    Tconf=Tconf_buy(close,i)
-			    cond4 = close[i] > Tconf
-			    if cond1,cond2,cond3 ,cond4:
-			    	n=i
-				    buy(n)=[open[i+1], Q[i] ]
+			cond2=buy_cond(master_crosses[0],master_crosses[1], master_timestamp)== True
+			cond3=buy_cond(middle_crosses[0],middle_crosses[1],middle_timestamp)==True
+			Tconf=Tconf_buy(close,i)
+			cond4 = close[i] > Tconf
+			if cond1,cond2,cond3 ,cond4:
+			        n=i
+			        buy(n)=[open[i+1], Q[i] ]
 				    for p in range(len(main_timestamp)):
 				    	if p>n:
 				    		close_timestamp=main_timestamp[p]

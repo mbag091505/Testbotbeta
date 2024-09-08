@@ -133,7 +133,7 @@ def sell_cond(sell_crosses,timestamp,x_value):
 			n=1
 			N.append(n)
 			
-	if len(N)=> x_value:
+	if len(N)==x_value:
 		return True
 	else:
 		return False
@@ -145,7 +145,7 @@ def close_buy_cond(close_crosses,timestamp,x_value):
 			n=1
 			N.append(n)
 	
-	if len(N) => x_value:
+	if len(N) == x_value:
 		return True
 	else:
 		return False
@@ -156,7 +156,7 @@ def close_sell_cond(close_crosses,timestamp,x_value):
 			if close _crosses[x] == [1,timestamp]:
 				n=1
 				N.append(n)
-		if len(N) => x_value:
+		if len(N) == x_value:
 			return True
 		else:
 			return False
@@ -174,7 +174,7 @@ def_Tconf_buy(param,n):
 	if n==0:
 		rule=params[n]
 		return rule
-	if 0<n<=10
+	if 0< n <= 10:
 	for i in range(1,n):
 		dot=params[n-i]
 		rule.extend(dot)
@@ -230,7 +230,7 @@ def buy_pnl(Q,Data,Buy_crosses,Close_buy_crosses,*kwargs):
 			base_timestamp=main_timestamp[i]
 			cond1=buy_cond(Buy_crosses[0],Buy_x_value,Base_timestamp)==True
 			
-			middle_timetamp=find_compare_timestamp(segment_2,i)
+			middle_timestamp=find_compare_timestamp(segment_2,i)
 			master_timestamp=find_compare_timestamp(segment_1,i)
 			
 			cond2=buy_cond(master_crosses[0],master_crosses[1], master_timestamp)== True
@@ -240,9 +240,9 @@ def buy_pnl(Q,Data,Buy_crosses,Close_buy_crosses,*kwargs):
 			if cond1,cond2,cond3 ,cond4:
 			        n=i
 			        buy(n)=[open[i+1], Q[i] ]
-				    for p in range(len(main_timestamp)):
-				    	if p>n:
-				    		close_timestamp=main_timestamp[p]
+				for p in range(len(main_timestamp)):
+					if p>n:
+						close_timestamp=main_timestamp[p]
 				    		
 				    		cond_close=close_buy_cond(Close_buy_crosses[0],close_timestamp, close_x_value,)==True
 				    		SL= (close[p] - buy(n)[0]) *buy(n)[1]

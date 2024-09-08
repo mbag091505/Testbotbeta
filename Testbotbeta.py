@@ -100,11 +100,11 @@ def create_segment(main_data,master_data):
 
 def concatenate_crosses(*Args):
 	if len(Args)>1:
-  	x_value= len(Args)
-  	combined_list=[]
-  	for lst in *Args:
-	    combined_list.extend(lst)
-	  return combined_list,x_value
+		x_value= len(Args)
+  	        combined_list=[]
+  	        for lst in Args:
+			combined_list.extend(lst)
+	        return combined_list,x_value
 	else:
 		x_value=1
 		combined_list=Arg
@@ -264,6 +264,7 @@ def buy_pnl(Q,Data,Buy_crosses,Close_buy_crosses,*kwargs):
 				    	            break
 			       pnl=(buy_close(n)-buy[n][0]) *buy(n)[1]
 			       Total_pnl.extend(pnl)
+	return Total_pnl
 				    		
 
 def sell_pnl(Q,Data,sell_crosses,Close_sell_crosses,*kwargs):

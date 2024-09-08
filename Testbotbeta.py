@@ -9,60 +9,33 @@ exchange=ccxt.binance()
 exchange.loadMarkets()
 symbol='BTCUSDT'
 
-def create since(days,mins):
+def create_since(days,mins):
 	Now=dt.now()
 	since=Now-timedelta(days=1*days,minutes=1*minutes)
 	starttime=int(since.timestamp()*1000)
 	return starttime
-
-def convert_since_to_unit(timeframe,since):
-	if timeframe[-1] in ('d', 'h', 'm' ,):
-		value_s=timeframe[:-1]
-		unit=timeframe[-1]
-		value=float(value_s)
-		
-		if unit== 's':
-			return since/(1000*60)
-		elif unit=='h':
-			return since/(1000*3600)
-		elif unit=='d':
-			return since/(100*3600*24)
-
-def calculate_STF(timeframe):
-	value_s=timeframe[:-1]
-	R=float(value)
-	STF=R*1000
-	return STF
-
-def convert_Audit_to_since_format(timeframe,audit):
-	unit=timeframe[-1]
-	if unit == 'm':
-		return audit*1000*60
-	elif unit=='h':
-		return audit*1000*3600
-	elif unit== 'd':
-		return audit*1000*3600*24
+def create_endttime(dayz,minz):
+	Now=dt.now()
+	end=Now-timedelta(days=1*dayz, minutes=1*minz)
+	endttime=int(end.timestamp()*1000)
+	return endttime
 	
 	
-def fetch_data(symbol,timeframe,days,mins):
+def fetch_data(symbol,timeframe,days,mins,**kwargs):
 	since=create_since(days,mins)
-	STF=calculate_STF(timeframe)
-	
+	dayz=kwargs.get('dayz')
+	minz=kwargs.get('minz')
+	endttime=create_endttime(dayz,minz)
+
 	all_candles=[]
-	while True:
-		candles=exchange.fetchOHLCV(symbol,timeframe,since)
+	while since < endttime:
+		candles=exchange.fetchOHLCV(symbol, timeframe, since)
 		all_candles.extend(candles)
+		if len(candles) < 1000:
+			break
 		
-		OD=convert_since_to_unit(timeframe,since)
-		Audit=OD-STF
-		if Audit < 0:
-			break
-		elif Audit==1:
-			break
-		elif audit >0:
-			time.sleep(1)
-			sinced=convert_Audit_to_since_format(timeframe,Audit):
-		since=sinced
+		since=candles[0][-1] + 1
+		
 		
 	df=pd.DataFrame(all_candles,columns=['timestamp','open','high','low','close','volume'])
 	data=np.array(df)
@@ -192,7 +165,7 @@ def close_sell_cond(close_crosses,timestamp,x_value):
 def create_Q(Ub,Lb):
 	Q=[]
 	for i in range(len(Ub)):
-		q=1/(Ub-Lb)
+		q=1/(Ub[i]-Lb[i])
 		Q.extend(q)
 		return Q
 		

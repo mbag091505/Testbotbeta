@@ -175,10 +175,10 @@ def_Tconf_buy(param,n):
 		rule=params[n]
 		return rule
 	if 0< n <= 10:
-	for i in range(1,n):
-		dot=params[n-i]
-		rule.extend(dot)
-	return max(rule)
+		for i in range(1,n):
+			dot=params[n-i]
+		        rule.extend(dot)
+	        return max(rule)
 	if 0<n>10:
 		for i in range(1,10):
 			dot=params(n-i)
@@ -195,11 +195,11 @@ def_Tconf_sell(param,n):
 	if 0<n<=1:
 		rule=params[n]
 		return rule
-	if 0<n<=10
-	for i in range(1,n):
-		dot=params[n-i]
-		rule.extend(dot)
-	return min(rule)
+	if 0<n<=10:
+		for i in range(1,n):
+			dot=params[n-i]
+		        rule.extend(dot)
+	        return min(rule)
 	if 0<n>10:
 		for i in range(1,10):
 			dot=params(n-i)
@@ -223,6 +223,7 @@ def buy_pnl(Q,Data,Buy_crosses,Close_buy_crosses,*kwargs):
 	
 	segment_1=kwargs.get('segments_1')
 	segment_2=kwargs.get('segments_2')
+	Total_pnl=[]
 	
 	for i in range(1,len(main_timestamp)):
 		n=0
@@ -255,14 +256,14 @@ def buy_pnl(Q,Data,Buy_crosses,Close_buy_crosses,*kwargs):
 				    		cond_Tp=Tp=>3
 				    		elif cond_Tp:
 				    			buy_close(n)=Open[p+1]
-				    		    n=p
-				    		    break
+				    		        n=p
+				    		        break
 				    		else cond_SL :
 				    		    buy_close(n)=Open[p+1]
 				    		    n=p
-				    	        break
-				    pnl=(buy_close(n)-buy[n][0]) *buy(n)[1]
-				    Total_pnl.extend(pnl)
+				    	            break
+			       pnl=(buy_close(n)-buy[n][0]) *buy(n)[1]
+			       Total_pnl.extend(pnl)
 				    		
 
 def sell_pnl(Q,Data,sell_crosses,Close_sell_crosses,*kwargs):
@@ -278,26 +279,27 @@ def sell_pnl(Q,Data,sell_crosses,Close_sell_crosses,*kwargs):
 	segment_2=kwargs.get('segments_2')
 	middle_x_value=middle_crosses[1]
 	main_x_value=main_crosses[1]
+	Total_pnl=[]
 	
 	for i in range(1,len(main_timestamp)):
-			 n=0
-		    if i > n:
-		    	base_timestamp=main_timestamp[i]
-			    cond1=sell_cond(sell_crosses[0],sell_x_values,Base_timestamp)==True
+		n=0
+		if i > n:
+			base_timestamp=main_timestamp[i]
+			cond1=sell_cond(sell_crosses[0],sell_x_values,Base_timestamp)==True
 			
-			    middle_timetamp=find_compare_timestamp(segment_2,i)
-			    master_timestamp=find_compare_timestamp(segment_1,i)
+			middle_timestamp=find_compare_timestamp(segment_2,i)
+			master_timestamp=find_compare_timestamp(segment_1,i)
 			
-			    cond2=sell_cond(master_crosses[0],master_crosses[1], master_timestamp)== True
-			    cond3=sell_cond(middle_crosses[0],middle_crosses[1],middle_timestamp)==True
-			    Tconf=Tconf_sell(close,i)
-			    cond4 = close[i] > Tconf
-			    if cond1,cond2,cond3 ,cond4:
-			    	n=i
-				    sell(n)=[open[i+1], Q[i] ]
-				    for p in range(len(main_timestamp)):
-				    	if p>n:
-				    		close_timestamp=main_timestamp[p]
+			cond2=sell_cond(master_crosses[0],master_crosses[1], master_timestamp)== True
+			cond3=sell_cond(middle_crosses[0],middle_crosses[1],middle_timestamp)==True
+			Tconf=Tconf_sell(close,i)
+			cond4 = close[i] > Tconf
+			if cond1 and cond2 and cond3 and cond4:
+				n=i
+				sell(n)=[open[i+1], Q[i] ]
+				for p in range(len(main_timestamp)):
+					if p>n:
+						close_timestamp=main_timestamp[p]
 				    		
 				    		cond_close=close_sell_cond(Close_sell_crosses[0],close_timestamp, close_x_value,)==True
 				    		SL= (close[p] - buy(n)[0]) *buy(n)[1]
@@ -315,12 +317,12 @@ def sell_pnl(Q,Data,sell_crosses,Close_sell_crosses,*kwargs):
 				    		if cond_Tp:
 				    		    sell_close(n)=open[p+1]
 				    		    n=p
-				    	        break
+				    	            break
 				    	     
-				    pnl=(sell(n)[0]-sell_close(n)) *buy(n)[1]
-				    Total_pnl.extend(pnl)
+			      pnl=(sell(n)[0]-sell_close(n)) *buy(n)[1]
+		              Total_pnl.extend(pnl)
 				   
-	 return Total
+	 return Total_pnl
 
 
 main_data=fetch_data(symbol,timeframe='3m',days=2,mins=0,dayz=0,minz=0)
@@ -328,22 +330,22 @@ master_data=fetch_data(symbol,timeframe='1h',days=2,mins=0,dayz=0,minz=0)
 middle_data=fetch_data(symbol,timeframe='15m',days=2,mins=0,dayz=0,minz=0)
 
 
-ma5i=calculate_indicators(symbol,timeframe='3m',days=2,indicator='sma',period=5)
+ma5i=calculate_indicators(symbol,timeframe='3m',days=2,indicator='sma',period=5,dayz=0,minz=[])
 
 
-ma20=calculate_indicators(symbol,timeframe='3m',days=2,indicator='sma',period=20)
+ma20=calculate_indicators(symbol,timeframe='3m',days=2,indicator='sma',period=20,dayz=0,minz=0)
 
-ma5ii=calculate_indicators(symbol,timeframe='15m',days=2,indicator='sma',period=5)
+ma5ii=calculate_indicators(symbol,timeframe='15m',days=2,indicator='sma',period=5,dayz=0,minz=0)
 
-ma5iii=calculate_indicators(symbol,timeframe='1h',days=2,indicator='sma',period=5)
+ma5iii=calculate_indicators(symbol,timeframe='1h',days=2,indicator='sma',period=5,dayz=0,minz=0)
 
-bbandsi=calculate_indicators(symbol,timeframe='3m',days=2,indicator='bbands',period=10,stddev=2)
-
-
-bbandsii=calculate_indicators(symbol,timeframe='15m',days=2,indicator='bbands',period=10,stddev=2)
+bbandsi=calculate_indicators(symbol,timeframe='3m',days=2,indicator='bbands',period=10,stddev=2,dayz=0,minz=0)
 
 
-bbandsiii=calculate_indicators(symbol,timeframe='1h',days=2,indicator='bbands',period=10,stddev=2)
+bbandsii=calculate_indicators(symbol,timeframe='15m',days=2,indicator='bbands',period=10,stddev=2,dayz=0,minz=0)
+
+
+bbandsiii=calculate_indicators(symbol,timeframe='1h',days=2,indicator='bbands',period=10,stddev=2,dayz=0,minz=0)
 
 Ubi=bbandsi[2]
 Lbi=bbandsi[0]

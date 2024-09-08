@@ -323,9 +323,9 @@ def sell_pnl(Q,Data,sell_crosses,Close_sell_crosses,*kwargs):
 	 return Total
 
 
-main_data=fetch_data(symbol,timeframe='3m',days=2,mins=0)
-master_data=fetch_data(symbol,timeframe='1h',days=2,mins=0)
-middle_data=fetch_data(symbol,timeframe='15m',days=2mins=0)
+main_data=fetch_data(symbol,timeframe='3m',days=2,mins=0,dayz=0,minz=0)
+master_data=fetch_data(symbol,timeframe='1h',days=2,mins=0,dayz=0,minz=0)
+middle_data=fetch_data(symbol,timeframe='15m',days=2,mins=0,dayz=0,minz=0)
 
 
 ma5i=calculate_indicators(symbol,timeframe='3m',days=2,indicator='sma',period=5)

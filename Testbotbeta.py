@@ -76,14 +76,15 @@ def calculate_indicators(symbol,timeframe,days,indicator,period,**kwargs):
 
 def create_crosses(indicator1,indicator2,data):
 	timestamp=data[0]
-	cross=[]
+	cross=ti.crossover(indicator1,indicator2)
+	crossover=[]
 	for i in range(len(timestamp)):
-		if indicator1[i]>indicator2[i]:
+		if cross[i]==1:
 			P=[1,timestamp[i]]
-			cross.append(P)
-		elif indicator1[i]<indicator2[i]:
+			crossover.append(P)
+		elif cross[i]==0:
 			P=[0,timestamp[i]]
-			cross.append(P)
+			crossover.append(P)
 	
 	return cross
 
@@ -95,7 +96,7 @@ def create_segment(main_data,master_data):
 	intersection=list(set1.intersection(set2))
 	
 	segments=[]
-	for i in range(len(intersection)):
+	for i in range(len(intersection)-1):
 		start=intersection[i]
 		stop=intersection[i+1]
 		segment=[x for x in main_timestamp if start <= x < stop]

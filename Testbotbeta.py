@@ -76,13 +76,12 @@ def calculate_indicators(symbol,timeframe,days,indicator,period,**kwargs):
 
 def create_crosses(indicator1,indicator2,data):
 	timestamp=data[0]
-	cross=ti.crossover(indicator1,indicator2)
 	crossover=[]
 	for i in range(len(timestamp)):
-		if cross[i]==1:
+		if indicator1[i]>indicator2[i]:
 			P=[1,timestamp[i]]
 			crossover.append(P)
-		elif cross[i]==0:
+		elif indicator1[i]<indicator2[i]:
 			P=[0,timestamp[i]]
 			crossover.append(P)
 	
@@ -113,6 +112,7 @@ def concatenate_crosses(*Args):
 	else:
 		x_value=1
 		combined_list=Args
+	return combined_list
 
 def find_compare_timestamp(segments,i):
 	for p in range(1,len(segments)):

@@ -92,7 +92,7 @@ def create_segment(main_data,master_data):
 	master_timestamp=master_data[0]
 	set1=set(main_timestamp)
 	set2=set(master_timestamp)
-	intersection=set1.intersection(set2)
+	intersection=list(set1.intersection(set2))
 	
 	segments=[]
 	for i in range(len(intersection)):
@@ -125,10 +125,11 @@ def buy_cond(buy_crosses,timestamp,x_value):
 		if buy_crosses[x]==[1,timestamp]:
 			n=1
 			N.append(n)
+		
 	if len(N) == x_value:
-		return True
+		return 1
 	else:
-		return False
+		return 0
 		
 def sell_cond(sell_crosses,timestamp,x_value):
 	N=[]
@@ -138,9 +139,9 @@ def sell_cond(sell_crosses,timestamp,x_value):
 			N.append(n)
 			
 	if len(N)==x_value:
-		return True
+		return 1
 	else:
-		return False
+		return 0
 
 def close_buy_cond(close_crosses,timestamp,x_value):
 	N=[]
@@ -150,9 +151,9 @@ def close_buy_cond(close_crosses,timestamp,x_value):
 			N.append(n)
 	
 	if len(N) == x_value:
-		return True
+		return 1
 	else:
-		return False
+		return 0
 
 def close_sell_cond(close_crosses,timestamp,x_value):
 		N=[]
@@ -161,9 +162,9 @@ def close_sell_cond(close_crosses,timestamp,x_value):
 				n=1
 				N.append(n)
 		if len(N) == x_value:
-			return True
+			return 1
 		else:
-			return False
+			return 0
 
 
 def create_Q(Ub,Lb):
@@ -233,24 +234,25 @@ def buy_pnl(Q,Data,Buy_crosses,Close_buy_crosses,master_crosses,segment_1,segmen
 		n=0
 		if i > n:
 			base_timestamp=main_timestamp[i]
-			cond1=buy_cond(Buy_crosses[0],Buy_x_values,base_timestamp)==True
+			cond1=buy_cond(Buy_crosses[0],Buy_x_values,base_timestamp)
+			cond1d=cond1==1
 			
 			middle_timestamp=find_compare_timestamp(segment_2,i)
 			master_timestamp=find_compare_timestamp(segment_1,i)
 			
-			cond2=buy_cond(master_crosses[0],master_crosses[1], master_timestamp)== True
-			cond3=buy_cond(middle_crosses[0],middle_crosses[1],middle_timestamp)==True
+			cond2=buy_cond(master_crosses[0],master_crosses[1], master_timestamp)== 1
+			cond3=buy_cond(middle_crosses[0],middle_crosses[1],middle_timestamp)==1
 			Tconf=Tconf_buy(close,i)
 			cond4 = close[i] > Tconf
 			n=0
 			buy=0
-			if cond1 and cond2 and cond3 and cond4:
+			if cond1d and cond2 and cond3 and cond4:
 				n=i
 				buy=[open[i+1], Q[i] ]
 				for p in range(len(main_timestamp)):
 					if p>n:
 						close_timestamp=main_timestamp[p]
-						cond_close=close_buy_cond(Close_buy_crosses[0],close_timestamp, close_x_value,)==True
+						cond_close=close_buy_cond(Close_buy_crosses[0],close_timestamp, close_x_value,)==1
 						SL=(close[p] - buy[0]) *buy[1]
 						cond_SL=SL>-1
 						if cond_close:
@@ -286,13 +288,13 @@ def sell_pnl(Q,Data,sell_crosses,Close_sell_crosses,master_crosses,middle_crosse
 		n=0
 		if i > n:
 			base_timestamp=main_timestamp[i]
-			cond1=sell_cond(sell_crosses[0],sell_x_values,base_timestamp)==True
+			cond1=sell_cond(sell_crosses[0],sell_x_values,base_timestamp)==1
 			
 			middle_timestamp=find_compare_timestamp(segment_2,i)
 			master_timestamp=find_compare_timestamp(segment_1,i)
 			
-			cond2=sell_cond(master_crosses[0],master_crosses[1], master_timestamp)== True
-			cond3=sell_cond(middle_crosses[0],middle_crosses[1],middle_timestamp)==True
+			cond2=sell_cond(master_crosses[0],master_crosses[1], master_timestamp)== 1
+			cond3=sell_cond(middle_crosses[0],middle_crosses[1],middle_timestamp)==1
 			Tconf=Tconf_sell(close,i)
 			cond4 = close[i] > Tconf
 			if cond1 and cond2 and cond3 and cond4:
@@ -301,7 +303,7 @@ def sell_pnl(Q,Data,sell_crosses,Close_sell_crosses,master_crosses,middle_crosse
 				for p in range(len(main_timestamp)):
 					if p>n:
 						close_timestamp=main_timestamp[p]
-						cond_close=close_sell_cond(Close_sell_crosses[0],close_timestamp, close_x_value)==True
+						cond_close=close_sell_cond(Close_sell_crosses[0],close_timestamp, close_x_value)==1
 						SL= (close[p] - sell(n)[0]) *sell[1]
 						cond_SL=SL>1
 						if cond_close:

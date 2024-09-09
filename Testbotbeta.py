@@ -181,21 +181,27 @@ def Tconf_buy(params,n):
 	if n==0:
 		rule=params[n]
 		return rule
+	if n==1:
+		rule=params[n]
+		return rule
 	if 0< n <10:
 		for i in range(1,n):
 			dot=params[n-i]
-			rule.extend(dot)
+			rule.extend(float(dot))
 		return max(rule)
 	if 0<n>10:
 		for i in range(1,10):
 			dot=params(n-i)
-			rule.extend(dot)
-		return max(rule)
+			rule.extend(float(dot))
+		
 	if n==-1:
 		for i in range(1,10):
 			dot=params[n-i]
-			rule.extend(dot)
-		return max(rule)
+			rule.extend(float(dot))
+		
+	else:
+		rule=0
+		return rule
 		
 def Tconf_sell(params,n):
 	rule=[]

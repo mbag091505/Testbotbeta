@@ -86,7 +86,7 @@ def create_crosses(indicator1,indicator2,data):
 			P=[0,timestamp[i]]
 			crossover.append(P)
 	
-	return cross
+	return crossover
 
 def create_segment(main_data,master_data):
 	main_timestamp=main_data[0]

@@ -117,7 +117,7 @@ def concatenate_crosses(*Args):
 def find_compare_timestamp(segments,i):
 	for p in range(1,len(segments)):
 		J=p*len(segments[p])
-		if len(J) > i:
+		if J > i:
 			return segments[p][0]
 				
 def buy_cond(buy_crosses,timestamp,x_value):
@@ -181,7 +181,7 @@ def Tconf_buy(params,n):
 	if n==0:
 		rule=params[n]
 		return rule
-	if 0< n <= 10:
+	if 0< n <10:
 		for i in range(1,n):
 			dot=params[n-i]
 			rule.extend(dot)
@@ -202,7 +202,7 @@ def Tconf_sell(params,n):
 	if 0<n<=1:
 		rule=params[n]
 		return rule
-	if 0<n<=10:
+	if 0<n<10:
 		for i in range(1,n):
 			dot=params[n-i]
 			rule.extend(dot)

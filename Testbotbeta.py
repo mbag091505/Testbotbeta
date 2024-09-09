@@ -217,17 +217,16 @@ def Tconf_sell(params,n):
 		return min(rule)
 		
 
-def buy_pnl(Q,Data,Buy_crosses,Close_buy_crosses,*kwargs):
+def buy_pnl(Q,Data,Buy_crosses,Close_buy_crosses,master_crosses,segment_1,segment_2,*kwargs):
 	open=Data[:,1]
 	close=Data[:,4]
 	main_timestamp=Data[:,0]
-	close_x_value=Close_buy_crosses[1]
-	Buy_x_values=Buy_crosses[1]
-	master_crosses=kwargs.get('master_crosses')
-	middle_crosses=kwargs.get('middle_crosses')
+	close_x_value=1
+	Buy_x_values=1
 	
-	segment_1=kwargs.get('segments_1')
-	segment_2=kwargs.get('segments_2')
+	
+	
+	
 	Total_pnl=[]
 	
 	for i in range(1,len(main_timestamp)):
@@ -272,17 +271,13 @@ def buy_pnl(Q,Data,Buy_crosses,Close_buy_crosses,*kwargs):
 	return Total_pnl
 				    		
 
-def sell_pnl(Q,Data,sell_crosses,Close_sell_crosses,*kwargs):
+def sell_pnl(Q,Data,sell_crosses,Close_sell_crosses,master_crosses,middle_crosses,segment_1,segment_2,**kwargs):
 	open=Data[:,1]
 	close=Data[:,4]
 	main_timestamp=Data[:,0]
-	close_x_value=Close_sell_crosses[1]
-	sell_x_values=sell_crosses[1]
-	master_crosses=kwargs.get('master_crosses')
-	middle_crosses=kwargs.get('middle _crosses')
+	close_x_value=1
+	sell_x_values=1
 	
-	segment_1=kwargs.get('segments_1')
-	segment_2=kwargs.get('segments_2')
 	middle_x_value=middle_crosses[1]
 	main_x_value=main_crosses[1]
 	Total_pnl=[]

@@ -234,14 +234,14 @@ def buy_pnl(Q,Data,Buy_crosses,Close_buy_crosses,master_crosses,segment_1,segmen
 		n=0
 		if i > n:
 			base_timestamp=main_timestamp[i]
-			cond1=buy_cond(Buy_crosses[0],Buy_x_values,base_timestamp)
+			cond1=buy_cond(Buy_crosses,base_timestamp,Buy_x_values)
 			cond1d=cond1==1
 			
 			middle_timestamp=find_compare_timestamp(segment_2,i)
 			master_timestamp=find_compare_timestamp(segment_1,i)
 			
-			cond2=buy_cond(master_crosses[0],master_crosses[1], master_timestamp)== 1
-			cond3=buy_cond(middle_crosses[0],middle_crosses[1],middle_timestamp)==1
+			cond2=buy_cond(master_crosses, master_timestamp,1)== 1
+			cond3=buy_cond(middle_crosses,middle_timestamp,1)==1
 			Tconf=Tconf_buy(close,i)
 			cond4 = close[i] > Tconf
 			n=0
@@ -252,7 +252,7 @@ def buy_pnl(Q,Data,Buy_crosses,Close_buy_crosses,master_crosses,segment_1,segmen
 				for p in range(len(main_timestamp)):
 					if p>n:
 						close_timestamp=main_timestamp[p]
-						cond_close=close_buy_cond(Close_buy_crosses[0],close_timestamp, close_x_value,)==1
+						cond_close=close_buy_cond(Close_buy_crosses,close_timestamp, close_x_value,)==1
 						SL=(close[p] - buy[0]) *buy[1]
 						cond_SL=SL>-1
 						if cond_close:
@@ -280,21 +280,20 @@ def sell_pnl(Q,Data,sell_crosses,Close_sell_crosses,master_crosses,middle_crosse
 	close_x_value=1
 	sell_x_values=1
 	
-	middle_x_value=middle_crosses[1]
-	main_x_value=main_crosses[1]
+
 	Total_pnl=[]
 	
 	for i in range(1,len(main_timestamp)):
 		n=0
 		if i > n:
 			base_timestamp=main_timestamp[i]
-			cond1=sell_cond(sell_crosses[0],sell_x_values,base_timestamp)==1
+			cond1=sell_cond(sell_crosses,base_timestamp,sell_x_values)==1
 			
 			middle_timestamp=find_compare_timestamp(segment_2,i)
 			master_timestamp=find_compare_timestamp(segment_1,i)
 			
-			cond2=sell_cond(master_crosses[0],master_crosses[1], master_timestamp)== 1
-			cond3=sell_cond(middle_crosses[0],middle_crosses[1],middle_timestamp)==1
+			cond2=sell_cond(master_crosses,master_timestamp,1)== 1
+			cond3=sell_cond(middle_crosses,middle_timestamp,1)==1
 			Tconf=Tconf_sell(close,i)
 			cond4 = close[i] > Tconf
 			if cond1 and cond2 and cond3 and cond4:

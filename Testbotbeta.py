@@ -16,8 +16,12 @@ def create_since(days,mins):
 	return starttime
 def create_endttime(dayz,minz):
 	Now=dt.now()
-	end=Now-timedelta(days=1*dayz, minutes=1*minz)
-	endttime=int(end.timestamp()*1000)
+	if minz and dayz:
+		end=Now-timedelta(days=1*dayz, minutes=1*minz)
+		endttime=int(end.timestamp()*1000)
+	else:
+		end=Now
+		endttime=int(end.timestamp()*1000)
 	return endttime
 	
 	
@@ -55,7 +59,7 @@ def calculate_mins(timeframe,period):
 
 def calculate_indicators(symbol,timeframe,days,indicator,period,**kwargs):
 	mins=calculate_mins(timeframe,period)
-	data=fetch_data(symbol,timeframe,days,mins)
+	data=fetch_data(symbol,timeframe,days,mins,**kwargs)
 	dataP=np.array(data)
 	
 	k_periods=kwargs.get('k_periods')
@@ -73,7 +77,7 @@ def calculate_indicators(symbol,timeframe,days,indicator,period,**kwargs):
 def create_crosses(indicator1,indicator2,data):
 	timestamp=data[0]
 	cross=[]
-	for i in range(len(indicator1)):
+	for i in range(len(timestamp)):
 		if indicator1[i]>indicator2[i]:
 			P=[1,timestamp[i]]
 			cross.append(P)
@@ -165,8 +169,9 @@ def close_sell_cond(close_crosses,timestamp,x_value):
 def create_Q(Ub,Lb):
 	Q=[]
 	for i in range(len(Ub)):
-		q=1/(Ub[i]-Lb[i])
-		Q.extend(q)
+		d=1/(Ub[i]-Lb[i])
+		q=float(d)
+		Q.append(q)
 		return Q
 		
 def Tconf_buy(params,n):
@@ -324,27 +329,27 @@ def sell_pnl(Q,Data,sell_crosses,Close_sell_crosses,*kwargs):
 	return Total_pnl
 
 
-main_data=fetch_data(symbol,timeframe='3m',days=2,mins=0,dayz=0,minz=0)
-master_data=fetch_data(symbol,timeframe='1h',days=2,mins=0,dayz=0,minz=0)
-middle_data=fetch_data(symbol,timeframe='15m',days=2,mins=0,dayz=0,minz=0)
+main_data=fetch_data(symbol,timeframe='3m',days=2,mins=0)
+master_data=fetch_data(symbol,timeframe='1h',days=2,mins=0)
+middle_data=fetch_data(symbol,timeframe='15m',days=2,mins=0)
 
 
-ma5i=calculate_indicators(symbol,timeframe='3m',days=2,indicator='sma',period=5,dayz=0,minz=[])
+ma5i=calculate_indicators(symbol,timeframe='3m',days=2,indicator='sma',period=5)
 
 
-ma20=calculate_indicators(symbol,timeframe='3m',days=2,indicator='sma',period=20,dayz=0,minz=0)
+ma20=calculate_indicators(symbol,timeframe='3m',days=2,indicator='sma',period=20)
 
-ma5ii=calculate_indicators(symbol,timeframe='15m',days=2,indicator='sma',period=5,dayz=0,minz=0)
+ma5ii=calculate_indicators(symbol,timeframe='15m',days=2,indicator='sma',period=5)
 
-ma5iii=calculate_indicators(symbol,timeframe='1h',days=2,indicator='sma',period=5,dayz=0,minz=0)
+ma5iii=calculate_indicators(symbol,timeframe='1h',days=2,indicator='sma',period=5)
 
-bbandsi=calculate_indicators(symbol,timeframe='3m',days=2,indicator='bbands',period=10,stddev=2,dayz=0,minz=0)
-
-
-bbandsii=calculate_indicators(symbol,timeframe='15m',days=2,indicator='bbands',period=10,stddev=2,dayz=0,minz=0)
+bbandsi=calculate_indicators(symbol,timeframe='3m',days=2,indicator='bbands',period=10,stddev=2)
 
 
-bbandsiii=calculate_indicators(symbol,timeframe='1h',days=2,indicator='bbands',period=10,stddev=2,dayz=0,minz=0)
+bbandsii=calculate_indicators(symbol,timeframe='15m',days=2,indicator='bbands',period=10,stddev=2)
+
+
+bbandsiii=calculate_indicators(symbol,timeframe='1h',days=2,indicator='bbands',period=10,stddev=2)
 
 Ubi=bbandsi[2]
 Lbi=bbandsi[0]

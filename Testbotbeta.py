@@ -48,9 +48,9 @@ def fetch_data(symbol,timeframe,days,mins,**kwargs):
 
 def calculate_mins(timeframe,period):
 	units=timeframe[-1]
-	value=float(timeframe[:-1])*period
+	value=float(timeframe[:-1])
 	if units=='m':
-		return value * period
+		return value*  period
 	if units=='h':
 		return value * 60 * period
 	if units=='d':
@@ -147,15 +147,10 @@ def sell_cond(sell_crosses,timestamp,x_value):
 def close_buy_cond(close_crosses,timestamp,x_value):
 	N=[]
 	for x in range(len(close_crosses)):
-		if close_crosses[x] == [0, timestamp]:
-			n=1
-			N.append(n)
-	
-	if len(N) == x_value:
-		return 1
-	else:
-		return 0
-
+		xond_xlose=close_crosses[x]==[0,timestamp]
+		if xond_xlose:
+			return 1
+		
 def close_sell_cond(close_crosses,timestamp,x_value):
 		N=[]
 		for x in range(len(close_crosses)):
@@ -172,7 +167,7 @@ def create_Q(Ub,Lb):
 	Q=[]
 	for i in range(len(Ub)):
 		d=1/(Ub[i]-Lb[i])
-		q=float(d)
+		q=d
 		Q.append(q)
 		return Q
 		
@@ -267,18 +262,9 @@ def buy_pnl(Q,Data,Buy_crosses,Close_buy_crosses,master_crosses,segment_1,segmen
 						if cond_close:
 							close=open[p+1]
 							n=p
-							Tp=(close[p]-buy[0])*buy[1]
-							cond_Tp=Tp>3
-						elif cond_Tp:
-							close=open[p+1]
-							n=p
 							break
-						elif cond_SL:
-							close=open[p+1]
-							n=p
-							break
-						pnl=(close-buy[0]) *buy(n)[1]
-						Total_pnl.extend(pnl)
+					pnl=(close-buy[0]) *buy(n)[1]
+					Total_pnl.extend(pnl)
 	return Total_pnl
 				    		
 
@@ -328,8 +314,8 @@ def sell_pnl(Q,Data,sell_crosses,Close_sell_crosses,master_crosses,middle_crosse
 							sell=open[p+1]
 							n=p
 							break
-					pnl=(sell[0]-close) *sell[1]
-					Total_pnl.extend(pnl)
+				pnl=(sell[0]-close) *sell[1]
+				Total_pnl.extend(pnl)
 				   
 	return Total_pnl
 
@@ -360,11 +346,11 @@ Ubi=bbandsi[2]
 Lbi=bbandsi[0]
 Mbi=bbandsi[1]
 
-Ubii=bbandsi[2]
-Mbii=bbandsi[1]
+Ubii=bbandsii[2]
+Mbii=bbandsii[1]
 
-Ubiii=bbandsi[2]
-Mbiii=bbandsi[1]
+Ubiii=bbandsiii[2]
+Mbiii=bbandsiii[1]
 
 Q=create_Q(Ubi,Lbi)	
 				
@@ -392,15 +378,15 @@ def drawdown(data):
 			drawdown.append(draw)
 	return drawdown
 
-buy_pnl= buy_pnl(Q,main_data,main_crosses,main_crosses,segment_1,segment_2,master_crosses,middle_crosses)
+buypnl= buy_pnl(Q,main_data,main_crosses,main_crosses,segment_1,segment_2,master_crosses,middle_crosses)
 
 
-sell_pnl=sell_pnl(Q,main_data,main_crosses,main_crosses,segment_1,segment_2,master_crosses,middle_crosses)
+sellpnl=sell_pnl(Q,main_data,main_crosses,main_crosses,segment_1,segment_2,master_crosses,middle_crosses)
 
 
-Total_pnl=sum(buy_pnl) + sum(sell_pnl)
-drawdown_buy=drawdown(buy_pnl)
-drawdown_sell=drawdown(sell_pnl)
+Total_pnl=sum(buypnl) + sum(sellpnl)
+drawdown_buy=drawdown(buypnl)
+drawdown_sell=drawdown(sellpnl)
 Total_drawdown=sum(drawdown_buy)+sum(drawdown_sell)
 print(len(ma5ii))
 print(len(ma5i))
@@ -413,3 +399,5 @@ print(len(Mbiii))
 
 print(Total_pnl)
 print(Total_drawdown)
+print(len(buypnl))
+

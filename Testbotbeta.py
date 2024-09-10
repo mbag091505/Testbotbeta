@@ -187,17 +187,17 @@ def Tconf_buy(params,n):
 	if 0< n <10:
 		for i in range(1,n):
 			dot=params[n-i]
-			rule.extend(float(dot))
+			rule.append(dot)
 		return max(rule)
 	if 0<n>10:
 		for i in range(1,10):
 			dot=params(n-i)
-			rule.extend(float(dot))
+			rule.append(dot)
 		
 	if n==-1:
 		for i in range(1,10):
 			dot=params[n-i]
-			rule.extend(float(dot))
+			rule.append(dot)
 		
 	else:
 		rule=0
@@ -211,17 +211,17 @@ def Tconf_sell(params,n):
 	if 0<n<10:
 		for i in range(1,n):
 			dot=params[n-i]
-			rule.extend(dot)
+			rule.append(dot)
 		return min(rule)
 	if 0<n>10:
 		for i in range(1,10):
 			dot=params(n-i)
-			rule.extend(dot)
+			rule.append(dot)
 		return min(rule)
 	if n==-1:
 		for i in range(1,10):
 			dot=params[n-i]
-			rule.extend(dot)
+			rule.append(dot)
 		return min(rule)
 		
 

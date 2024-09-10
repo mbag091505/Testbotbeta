@@ -209,14 +209,9 @@ def Tconf_sell(params,n):
 	if n==0:
 		rule=params[n]
 		return rule
-	if 0<n<1:
+	if n==1:
 		rule=params[n]
 		return rule
-	if 0<n<10:
-		for i in range(1,n):
-			dot=params[n-i]
-			rule.append(dot)
-		return min(rule)
 	if 0<n>10:
 		for i in range(1,10):
 			dot=params[n-i]
@@ -390,11 +385,11 @@ master_crosses=concatenate_crosses(crossiii1)
 
 
 def drawdown(data):
+	drawdown=[]
 	for i in range(len(data)):
-		drawdown=[]
 		if data[i]<0:
 			draw=data[i]
-			drawdown.extend(draw)
+			drawdown.append(draw)
 	return drawdown
 
 buy_pnl= buy_pnl(Q,main_data,main_crosses,main_crosses,segment_1,segment_2,master_crosses,middle_crosses)

@@ -177,11 +177,12 @@ def create_Q(Ub,Lb):
 		return Q
 		
 def Tconf_buy(params,n):
-	rule=[]
+	rule =[]
+	
 	if n==0:
 		rule=params[n]
 		return rule
-	if n==1:
+	elif n==1:
 		rule=params[n]
 		return rule
 	if 0< n <10:
@@ -191,7 +192,7 @@ def Tconf_buy(params,n):
 		return max(rule)
 	if 0<n>10:
 		for i in range(1,10):
-			dot=params(n-i)
+			dot=params[n-i]
 			rule.append(dot)
 		
 	if n==-1:
@@ -205,7 +206,10 @@ def Tconf_buy(params,n):
 		
 def Tconf_sell(params,n):
 	rule=[]
-	if 0<n<=1:
+	if n==0:
+		rule=params[n]
+		return rule
+	if 0<n<1:
 		rule=params[n]
 		return rule
 	if 0<n<10:
@@ -215,7 +219,7 @@ def Tconf_sell(params,n):
 		return min(rule)
 	if 0<n>10:
 		for i in range(1,10):
-			dot=params(n-i)
+			dot=params[n-i]
 			rule.append(dot)
 		return min(rule)
 	if n==-1:
@@ -223,6 +227,9 @@ def Tconf_sell(params,n):
 			dot=params[n-i]
 			rule.append(dot)
 		return min(rule)
+	else:
+		rule=params[n]
+		return rule
 		
 
 def buy_pnl(Q,Data,Buy_crosses,Close_buy_crosses,master_crosses,segment_1,segment_2,*kwargs):

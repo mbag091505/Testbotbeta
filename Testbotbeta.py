@@ -19,12 +19,13 @@ def create_endttime(dayz,minz):
 	if minz and dayz:
 		end=Now-timedelta(days=1*dayz, minutes=1*minz)
 		endttime=int(end.timestamp()*1000)
+		return endttime
 	else:
-		end=Now
+		end=Now-timedelta(days=1*0,minutes =1*0.5)
 		endttime=int(end.timestamp()*1000)
 	return endttime
 	
-	
+
 def fetch_data(symbol,timeframe,days,mins,**kwargs):
 	since=create_since(days,mins)
 	dayz=kwargs.get('dayz')
@@ -32,13 +33,16 @@ def fetch_data(symbol,timeframe,days,mins,**kwargs):
 	endttime=create_endttime(dayz,minz)
 
 	all_candles=[]
-	while since < endttime:
+	while since<endttime:
 		candles=exchange.fetchOHLCV(symbol, timeframe, since)
-		all_candles.extend(candles)
-		if len(candles) < 1000:
+		if not candles:
 			break
-		
-		since=candles[0][-1] + 1
+		all_candles.extend(candles)
+		since=int(candles[-1][0]+1)
+		if since >=endttime:
+			break
+		#if len(candles)<1000:
+			#break
 		
 		
 	df=pd.DataFrame(all_candles,columns=['timestamp','open','high','low','close','volume'])

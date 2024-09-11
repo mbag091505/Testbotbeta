@@ -60,17 +60,17 @@ def calculate_mins(timeframe,period):
 def calculate_indicators(symbol,timeframe,days,indicator,period,**kwargs):
 	mins=calculate_mins(timeframe,period)
 	data=fetch_data(symbol,timeframe,days,mins,**kwargs)
-	dataP=np.array(data)
+	
 	
 	k_periods=kwargs.get('k_periods')
 	stddev=kwargs.get('stddev')
 	D_periods=kwargs.get('D_periods')
 	if indicator=='sma':
-		indicator=ti.sma(dataP[:,4],period)
+		indicator=ti.sma(data[:,4],period)
 	elif indicator=='bbands':
-		indicator= ti.bbands(dataP[:,4],period,stddev)
+		indicator= ti.bbands(data[:,4],period,stddev)
 	elif indicator == 'stoch':
-		indicator=ti.stoch(dataP[:,2],dataP[:,3],dataP[:,4],period,k_periods,D_periods)
+		indicator=ti.stoch(data[:,2],data[:,3],data[:,4],period,k_periods,D_periods)
 		
 	return indicator
 
@@ -88,8 +88,8 @@ def create_crosses(indicator1,indicator2,data):
 	return crossover
 
 def create_segment(main_data,master_data):
-	main_timestamp=main_data[0]
-	master_timestamp=master_data[0]
+	main_timestamp=main_data[:,0]
+	master_timestamp=master_data[:,0]
 	set1=set(main_timestamp)
 	set2=set(master_timestamp)
 	intersection=list(set1.intersection(set2))

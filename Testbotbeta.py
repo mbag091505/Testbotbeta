@@ -41,8 +41,7 @@ def fetch_data(symbol,timeframe,days,mins,**kwargs):
 		since=int(candles[-1][0]+1)
 		if since >=endttime:
 			break
-		#if len(candles)<1000:
-			#break
+		
 		
 		
 	df=pd.DataFrame(all_candles,columns=['timestamp','open','high','low','close','volume'])
@@ -120,10 +119,11 @@ def concatenate_crosses(*Args):
 
 def find_compare_timestamp(segments,i):
 	for p in range(1,len(segments)):
-		segment=[x for x in segments ]
+		
 		J=p*len(segments[p])
 		if J > i:
-			return segments[p][0]
+			x=segments[p]
+			return x[0]
 				
 def buy_cond(buy_crosses,timestamp,x_value):
 	N=[]
@@ -132,7 +132,7 @@ def buy_cond(buy_crosses,timestamp,x_value):
 			n=1
 			N.append(n)
 		
-	if len(N) == x_value:
+	if len(N) >= x_value:
 		return 1
 	else:
 		return 0
@@ -144,7 +144,7 @@ def sell_cond(sell_crosses,timestamp,x_value):
 			n=1
 			N.append(n)
 			
-	if len(N)==x_value:
+	if len(N)>=x_value:
 		return 1
 	else:
 		return 0
@@ -162,7 +162,7 @@ def close_sell_cond(close_crosses,timestamp,x_value):
 			if close_crosses[x] == [1,timestamp]:
 				n=1
 				N.append(n)
-		if len(N) == x_value:
+		if len(N) >= x_value:
 			return 1
 		else:
 			return 0
@@ -194,11 +194,12 @@ def Tconf_buy(params,n):
 		for i in range(1,10):
 			dot=params[n-i]
 			rule.append(dot)
-		
+		return max(rule)
 	if n==-1:
 		for i in range(1,10):
 			dot=params[n-i]
 			rule.append(dot)
+		return max(rule)
 		
 	else:
 		rule=0
@@ -267,7 +268,7 @@ def buy_pnl(Q,Data,Buy_crosses,Close_buy_crosses,master_crosses,segment_1,segmen
 						if cond_close:
 							close=open[p+1]
 							n=p
-							break
+							
 					pnl=(close-buy[0]) *buy(n)[1]
 					Total_pnl.append(pnl)
 	return Total_pnl
@@ -308,17 +309,8 @@ def sell_pnl(Q,Data,sell_crosses,Close_sell_crosses,master_crosses,middle_crosse
 						if cond_close:
 							close=open[p+1]
 							n=p
-							break
-						elif cond_SL:
-							close=open[p+1]
-							n=p
-							break
-						Tp=(sell[0]-close[p])*sell[1]
-						cond_Tp=Tp=3
-						if cond_Tp:
-							sell=open[p+1]
-							n=p
-							break
+							
+			
 				pnl=(sell[0]-close) *sell[1]
 				Total_pnl.append(pnl)
 				   

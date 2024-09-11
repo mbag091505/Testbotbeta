@@ -116,6 +116,7 @@ def concatenate_crosses(*Args):
 
 def find_compare_timestamp(segments,i):
 	for p in range(1,len(segments)):
+		segment=[x for x in segments ]
 		J=p*len(segments[p])
 		if J > i:
 			return segments[p][0]
@@ -264,7 +265,7 @@ def buy_pnl(Q,Data,Buy_crosses,Close_buy_crosses,master_crosses,segment_1,segmen
 							n=p
 							break
 					pnl=(close-buy[0]) *buy(n)[1]
-					Total_pnl.extend(pnl)
+					Total_pnl.append(pnl)
 	return Total_pnl
 				    		
 
@@ -315,7 +316,7 @@ def sell_pnl(Q,Data,sell_crosses,Close_sell_crosses,master_crosses,middle_crosse
 							n=p
 							break
 				pnl=(sell[0]-close) *sell[1]
-				Total_pnl.extend(pnl)
+				Total_pnl.append(pnl)
 				   
 	return Total_pnl
 
